@@ -1,0 +1,43 @@
+from os import getenv
+from typing import List, Optional
+from fastapi import FastAPI
+from databases import Database
+from app.schema.input import UsuarioSchemaIn
+from app.schema.output import UsuarioSchemaOut
+from app.controller import tratar_insert, pegar_usuario_e_itens
+from app.database import init_db
+from app.model import init_table
+
+
+app = FastAPI(title="Crud usando FastAPI - Async DB")
+db = Database(url=getenv("DATABASE_URI"))
+init_table()
+init_db(app=app, db=db)
+
+
+@app.post("/usuario/", response_model=UsuarioSchemaOut, tags=["usuário"], status_code=201)
+async def criar_usuario(usuario: UsuarioSchemaIn):
+    result = await tratar_insert(db=db, model=usuario)
+    return result
+
+
+@app.get("/usuario/{id}/", response_model=UsuarioSchemaOut, tags=["usuário"])
+async def pegar_usuario(id: int):
+    result = await pegar_usuario_e_itens(db=db, id=id)
+    return result[0]
+
+
+@app.get("/usuario/", response_model=List[UsuarioSchemaOut], tags=["usuário"])
+async def pegar_lista_usuarios():
+    result = await pegar_usuario_e_itens(db=db)
+    return result
+
+
+@app.patch("/usuario/{id}/", response_model=UsuarioSchemaOut, tags=["usuário"])
+async def atualizar_usuario(id: int, usuario: UsuarioSchemaIn):
+    ...
+
+
+@app.delete("/usuario/{id}/", response_model=UsuarioSchemaOut, tags=["usuário"])
+async def deletar_usuario(id: int):
+    ...
