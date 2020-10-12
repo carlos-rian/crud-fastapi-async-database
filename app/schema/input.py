@@ -12,12 +12,15 @@ class ItemSchemaIn(BaseModel):
     data_de_atualizacao: datetime = Field(default_factory=datetime.now)
 
 
-class UsuarioSchemaIn(BaseModel):
+class UsuarioSchemaBaseIn(BaseModel):
     nome: str
     sobrenome: str
     funcionario: Optional[bool] = False
     data_de_nascimento: Optional[date] = None
     data_de_criacao: datetime = Field(default_factory=datetime.now)
     data_de_atualizacao: datetime = Field(default_factory=datetime.now)
+
+
+class UsuarioSchemaIn(UsuarioSchemaBaseIn):
     itens: List[Optional[ItemSchemaIn]] = None
 

@@ -36,7 +36,9 @@ async def pegar_usuario_e_itens(db: Database, id: int = None):
 
     result_usuario = await db.fetch_all(query=query)
     if not result_usuario:
-        raise HTTPException(status_code=404, detail="usuário não encontrado",)
+        raise HTTPException(
+            status_code=404, detail="usuário não encontrado",
+        )
 
     for index, data in enumerate(result_usuario):
         data = dict(data)
@@ -46,22 +48,34 @@ async def pegar_usuario_e_itens(db: Database, id: int = None):
     return result_usuario
 
 
-async def atualizar_usuario(table: Table, values: dict, db: Database, id: int = None):
-    query = table.select(table.c.id == id)
-    result = await db.fetch_all(query=query)
-    if not result:
+async def atualiza_usuario(model: UsuarioSchemaIn, db: Database, id: int):
+    query_usuario = usuario.select(usuario.c.id == id)
+    result_usuario = await db.fetch_all(query=query_usuario)
+
+    if not result_usuario:
         raise HTTPException(status_code=404, detail="usuário não encontrado")
 
-    query = table.update().where(table.c.id == id).values(values)
-    await db.execute(query=query)
-    return {**values, "id": id}
+    update_usuario = (
+        usuario.update()
+        .where(usuario.c.id == id)
+        .values(model.dict(exclude={"itens"}, exclude_none=True, exclude_unset=True))
+    )
+
+    await db.execute(query=update_usuario)
+
+    return {"id": id, **model.dict(exclude={"itens"}, exclude_none=True, exclude_unset=True)}
 
 
-async def deletar_usuario(table: Table, db: Database, id: int = None):
-    query = table.select().where(table.c.id == id)
-    result = await db.fetch_all(query=query)
-    if not result:
+async def deletar_usuario_e_item(db: Database, id: int):
+    query_usuario = usuario.select().where(usuario.c.id == id)
+    usuario_result = await db.fetch_one(query=query_usuario)
+
+    query_item = item.select().where(item.c.usuario_id_fk == id)
+    item_result = await db.fetch_all(query=query_item)
+
+    if not usuario_result:
         raise HTTPException(status_code=404, detail="usuário não encontrado")
 
-    await table.delete().where(table.c.id == id)
-    return result
+    await db.execute(item.delete().where(item.c.usuario_id_fk == id))
+    await db.execute(usuario.delete().where(usuario.c.id == id))
+    return {**usuario_result, "itens": [{**itens} for itens in item_result]}
