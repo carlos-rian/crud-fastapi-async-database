@@ -3,7 +3,7 @@ from databases import Database
 from fastapi import FastAPI
 
 
-def init_db(app: FastAPI, db: Database) -> FastAPI:
+def init_app(app: FastAPI, db: Database) -> FastAPI:
     """inicializar eventos de start e stop da aplicação.
 
     Args:

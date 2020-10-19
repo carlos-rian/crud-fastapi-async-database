@@ -1,8 +1,8 @@
-from .input import ItemSchemaIn, UsuarioSchemaBaseIn
+from .input import ItemSchemaBaseIn, UsuarioSchemaBaseIn
 from typing import List, Optional
 
 
-class ItemSchemaOut(ItemSchemaIn):
+class ItemSchemaOut(ItemSchemaBaseIn):
     id: int
 
 

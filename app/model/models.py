@@ -1,3 +1,6 @@
+from os import getenv
+from sqlalchemy import create_engine
+
 from sqlalchemy import (
     Table,
     String,
@@ -11,6 +14,7 @@ from sqlalchemy import (
     Column,
     ForeignKeyConstraint,
 )
+
 
 metadata = MetaData()
 
@@ -41,3 +45,9 @@ item = Table(
         columns=["usuario_id_fk"], refcolumns=["usuarios.id"], name="fk_item_usuario_id",
     ),
 )
+
+
+def init_app():
+    DATABASE_URI = getenv("DATABASE_URI")
+    engine = create_engine(DATABASE_URI, echo=True)
+    metadata.create_all(bind=engine)
