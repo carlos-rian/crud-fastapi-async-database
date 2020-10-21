@@ -1,3 +1,6 @@
+"""
+Modulo de controller para manipular usuários no banco de dados.
+"""
 from typing import List, Mapping
 
 from databases import Database

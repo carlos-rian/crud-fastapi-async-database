@@ -1,3 +1,7 @@
+"""
+Modulo de controller para manipular itens no banco de dados.
+"""
+
 from typing import List, Mapping
 
 from databases import Database
