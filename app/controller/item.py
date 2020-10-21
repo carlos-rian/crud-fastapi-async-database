@@ -1,19 +1,22 @@
+from typing import List, Mapping
+
 from databases import Database
 from fastapi import HTTPException
-from sqlalchemy.sql.expression import and_
 
 from app.model.models import item
 from app.schema.input import ItemSchemaBaseIn
 
 
-async def inserir_item(db: Database, model: ItemSchemaBaseIn):
+async def inserir_item(db: Database, model: ItemSchemaBaseIn) -> dict:
     values = model.dict()
     query = item.insert().values(values)
     id = await db.execute(query=query)
     return {"id": id, **values}
 
 
-async def selecionar_item(db: Database, user_id: int, item_id: int = None):
+async def selecionar_item(
+    db: Database, user_id: int, item_id: int = None
+) -> List[Mapping]:
     query = (
         item.select((item.c.usuario_id_fk == user_id) & (item.c.id == item_id))
         if item_id
@@ -30,7 +33,7 @@ async def selecionar_item(db: Database, user_id: int, item_id: int = None):
 
 async def atualizar_item(
     model: ItemSchemaBaseIn, db: Database, user_id: int, item_id: int
-):
+) -> dict:
     await selecionar_item(db=db, user_id=user_id, item_id=item_id)
     values = model.dict(exclude_none=True, exclude={"data_de_criacao"})
     update = (
@@ -47,7 +50,7 @@ async def deletar_item(
     user_id: int,
     item_id: int = None,
     detele_by_user: bool = False,
-):
+) -> None:
     if not detele_by_user:
         await selecionar_item(db=db, user_id=user_id, item_id=item_id)
     query = (
