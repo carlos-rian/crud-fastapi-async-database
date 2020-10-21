@@ -1,13 +1,12 @@
 from os import getenv
 from typing import List, Optional
-from fastapi import FastAPI
+
 from databases import Database
+from fastapi import FastAPI
 
-from app.model import models
 from app.database import connection
-from app.resource import item
-from app.resource import user
-
+from app.model import models
+from app.resource import item, user
 
 app = FastAPI(title="Crud usando FastAPI - Async DB", debug=True)
 db = Database(url=getenv("DATABASE_URI", ""))
