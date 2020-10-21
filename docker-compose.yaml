@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  fastapi:
+    container_name: application-fastapi
+    command: "uvicorn app:app --reload --use-colors"
+    build: ./
+    env_file: .env
+    ports:
+      - 8000:8000
+    links:
+      - postgresql
+
+  postgresql:
+    image: postgres:12-alpine
+    container_name: database-postgres
+    volumes:
+      - ./.data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=crud_fastapi
+    ports:
+      - 5050:5432
+    restart: always
