@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from .input import ItemSchemaBaseIn, UsuarioSchemaBaseIn
 from typing import List, Optional
+
+from pydantic import BaseModel
+
+from .input import ItemSchemaBaseIn, UsuarioSchemaBaseIn
 
 
 class RespostaDeDelete(BaseModel):

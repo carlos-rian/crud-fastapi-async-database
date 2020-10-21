@@ -1,20 +1,19 @@
 from os import getenv
-from sqlalchemy import create_engine
 
 from sqlalchemy import (
-    Table,
-    String,
-    Integer,
     Boolean,
-    DateTime,
-    Date,
-    Float,
-    Text,
-    MetaData,
     Column,
+    Date,
+    DateTime,
+    Float,
     ForeignKeyConstraint,
+    Integer,
+    MetaData,
+    String,
+    Table,
+    Text,
+    create_engine,
 )
-
 
 metadata = MetaData()
 

@@ -1,10 +1,12 @@
-from typing import List, Dict
-from fastapi import FastAPI
-from databases import Database
+from typing import Dict, List
+
+from app.controller import atualizar_usuario, deletar_usuario, inserir_usuario, selecionar_usuario
 from app.error import errors
 from app.schema.input import UsuarioSchemaBaseIn as usbi
-from app.schema.output import UsuarioSchemaBaseOut as usbo, RespostaDeDelete as rdd
-from app.controller import inserir_usuario, selecionar_usuario, atualizar_usuario, deletar_usuario
+from app.schema.output import RespostaDeDelete as rdd
+from app.schema.output import UsuarioSchemaBaseOut as usbo
+from databases import Database
+from fastapi import FastAPI
 
 
 def init_app(app: FastAPI, db=Database) -> FastAPI:

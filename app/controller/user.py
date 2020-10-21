@@ -1,7 +1,8 @@
-from fastapi import HTTPException
-from databases import Database
 from app.model.models import usuario
 from app.schema.input import UsuarioSchemaBaseIn
+from databases import Database
+from fastapi import HTTPException
+
 from .item import deletar_item
 
 
