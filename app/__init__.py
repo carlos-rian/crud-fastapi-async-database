@@ -9,10 +9,9 @@ from app.resource import item
 from app.resource import user
 
 
-app = FastAPI(title="Crud usando FastAPI - Async DB")
-db = Database(url=getenv("DATABASE_URI"))
+app = FastAPI(title="Crud usando FastAPI - Async DB", debug=True)
+db = Database(url=getenv("DATABASE_URI", ""))
 models.init_app()
 connection.init_app(app=app, db=db)
 user.init_app(app=app, db=db)
 item.init_app(app=app, db=db)
-
