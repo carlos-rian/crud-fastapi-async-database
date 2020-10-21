@@ -1,8 +1,9 @@
-from app.model.models import item
-from app.schema.input import ItemSchemaBaseIn
 from databases import Database
 from fastapi import HTTPException
 from sqlalchemy.sql.expression import and_
+
+from app.model.models import item
+from app.schema.input import ItemSchemaBaseIn
 
 
 async def inserir_item(db: Database, model: ItemSchemaBaseIn):
@@ -21,12 +22,15 @@ async def selecionar_item(db: Database, user_id: int, item_id: int = None):
     result = await db.fetch_all(query=query)
     if not result:
         raise HTTPException(
-            status_code=404, detail=f"O usuário de id: {user_id} não tem nenhum item válido."
+            status_code=404,
+            detail=f"O usuário de id: {user_id} não tem nenhum item válido.",
         )
     return result
 
 
-async def atualizar_item(model: ItemSchemaBaseIn, db: Database, user_id: int, item_id: int):
+async def atualizar_item(
+    model: ItemSchemaBaseIn, db: Database, user_id: int, item_id: int
+):
     await selecionar_item(db=db, user_id=user_id, item_id=item_id)
     values = model.dict(exclude_none=True, exclude={"data_de_criacao"})
     update = (
@@ -39,12 +43,17 @@ async def atualizar_item(model: ItemSchemaBaseIn, db: Database, user_id: int, it
 
 
 async def deletar_item(
-    db: Database, user_id: int, item_id: int = None, detele_by_user: bool = False
+    db: Database,
+    user_id: int,
+    item_id: int = None,
+    detele_by_user: bool = False,
 ):
     if not detele_by_user:
         await selecionar_item(db=db, user_id=user_id, item_id=item_id)
     query = (
-        item.delete().where((item.c.id == item_id) & (item.c.usuario_id_fk == user_id))
+        item.delete().where(
+            (item.c.id == item_id) & (item.c.usuario_id_fk == user_id)
+        )
         if item_id
         else item.delete().where(item.c.usuario_id_fk == user_id)
     )

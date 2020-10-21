@@ -1,5 +1,4 @@
 from os import getenv
-from typing import List, Optional
 
 from databases import Database
 from fastapi import FastAPI

@@ -1,19 +1,8 @@
 from os import getenv
 
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Date,
-    DateTime,
-    Float,
-    ForeignKeyConstraint,
-    Integer,
-    MetaData,
-    String,
-    Table,
-    Text,
-    create_engine,
-)
+from sqlalchemy import (Boolean, Column, Date, DateTime, Float,
+                        ForeignKeyConstraint, Integer, MetaData, String, Table,
+                        Text, create_engine)
 
 metadata = MetaData()
 
@@ -41,7 +30,9 @@ item = Table(
     Column("data_de_criacao", DateTime, nullable=False),
     Column("data_de_atualizacao", DateTime, nullable=False),
     ForeignKeyConstraint(
-        columns=["usuario_id_fk"], refcolumns=["usuarios.id"], name="fk_item_usuario_id",
+        columns=["usuario_id_fk"],
+        refcolumns=["usuarios.id"],
+        name="fk_item_usuario_id",
     ),
 )
 

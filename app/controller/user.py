@@ -1,7 +1,8 @@
-from app.model.models import usuario
-from app.schema.input import UsuarioSchemaBaseIn
 from databases import Database
 from fastapi import HTTPException
+
+from app.model.models import usuario
+from app.schema.input import UsuarioSchemaBaseIn
 
 from .item import deletar_item
 
@@ -14,14 +15,20 @@ async def inserir_usuario(db: Database, model: UsuarioSchemaBaseIn):
 
 
 async def selecionar_usuario(db: Database, user_id: int = None):
-    query = usuario.select(usuario.c.id == user_id) if user_id else usuario.select()
+    query = (
+        usuario.select(usuario.c.id == user_id)
+        if user_id
+        else usuario.select()
+    )
     result = await db.fetch_all(query=query)
     if not result:
         raise HTTPException(status_code=404, detail="Usuário não encontrado.")
     return result
 
 
-async def atualizar_usuario(model: UsuarioSchemaBaseIn, db: Database, user_id: int):
+async def atualizar_usuario(
+    model: UsuarioSchemaBaseIn, db: Database, user_id: int
+):
     await selecionar_usuario(db=db, user_id=user_id)
     values = model.dict(exclude_none=True, exclude={"data_de_criacao"})
     update = usuario.update().where(usuario.c.id == user_id).values(values)

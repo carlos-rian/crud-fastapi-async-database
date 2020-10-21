@@ -3,7 +3,8 @@ from pydantic import BaseModel
 
 class DefaultError(BaseModel):
     """
-    Essa classe faz o mapeamento do erro possivel, caso não enconte um item ou usuário.
+    Essa classe faz o mapeamento do erro possivel, 
+    caso não enconte um item ou usuário.
     """
 
     detail: str
@@ -11,7 +12,7 @@ class DefaultError(BaseModel):
 
 usuario = {
     404: {
-        "description": "Erro ao consultar usuário, o mesmo não existe na base.",
+        "description": "Erro ao consultar usuário, não existe na base.",
         "model": DefaultError,
     }
 }
