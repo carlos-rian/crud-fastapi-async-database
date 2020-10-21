@@ -1,5 +1,10 @@
+from pydantic import BaseModel
 from .input import ItemSchemaBaseIn, UsuarioSchemaBaseIn
 from typing import List, Optional
+
+
+class RespostaDeDelete(BaseModel):
+    message: str = "Usuário ou Item não encotrado."
 
 
 class ItemSchemaOut(ItemSchemaBaseIn):
@@ -10,6 +15,6 @@ class UsuarioSchemaBaseOut(UsuarioSchemaBaseIn):
     id: int
 
 
-class UsuarioSchemaOut(UsuarioSchemaBaseOut):
+class UsuarioItemSchemaOut(UsuarioSchemaBaseOut):
     itens: List[Optional[ItemSchemaOut]]
 

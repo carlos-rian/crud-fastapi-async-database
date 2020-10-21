@@ -1,37 +1,51 @@
+from fastapi import HTTPException
 from databases import Database
 from app.model.models import item
 from app.schema.input import ItemSchemaBaseIn
+from sqlalchemy.sql.expression import and_
 
 
 async def inserir_item(db: Database, model: ItemSchemaBaseIn):
-    values = model.dict(exclude={"itens"}, exclude_none=True, exclude_unset=True)
+    values = model.dict()
     query = item.insert().values(values)
     id = await db.execute(query=query)
     return {"id": id, **values}
 
 
-async def selecionar_item(db: Database, id: int):
-    query = item.select(item.c.usuario_id_fk == id)
+async def selecionar_item(db: Database, user_id: int, item_id: int = None):
+    query = (
+        item.select((item.c.usuario_id_fk == user_id) & (item.c.id == item_id))
+        if item_id
+        else item.select(item.c.usuario_id_fk == user_id)
+    )
     result = await db.fetch_all(query=query)
+    if not result:
+        raise HTTPException(
+            status_code=404, detail=f"O usuário de id: {user_id} não tem nenhum item válido."
+        )
     return result
 
 
-async def atualizar_item(model: ItemSchemaBaseIn, db: Database, id: int):
-    result = await selecionar_item(db=db, id=id)
-    if not result:
-        raise HTTPException(status_code=404, detail="usuário não encontrado")
-
-    values = model.dict(exclude={"itens"}, exclude_none=True, exclude_unset=True)
-    update = item.update().where(item.c.id == id).values(values)
+async def atualizar_item(model: ItemSchemaBaseIn, db: Database, user_id: int, item_id: int):
+    await selecionar_item(db=db, user_id=user_id, item_id=item_id)
+    values = model.dict(exclude_none=True, exclude={"data_de_criacao"})
+    update = (
+        item.update()
+        .where((item.c.usuario_id_fk == user_id) & (item.c.id == item_id))
+        .values(values)
+    )
     await db.execute(query=update)
+    return {"id": item_id, **values}
 
-    return {"id": id, **values}
 
-
-async def deletar_item(db: Database, id: int):
-    result = await selecionar_item(db=db, id=id)
-    if not result:
-        raise HTTPException(status_code=404, detail="usuário não encontrado")
-
-    query = item.delete().where(item.c.id == id)
+async def deletar_item(
+    db: Database, user_id: int, item_id: int = None, detele_by_user: bool = False
+):
+    if not detele_by_user:
+        await selecionar_item(db=db, user_id=user_id, item_id=item_id)
+    query = (
+        item.delete().where((item.c.id == item_id) & (item.c.usuario_id_fk == user_id))
+        if item_id
+        else item.delete().where(item.c.usuario_id_fk == user_id)
+    )
     return await db.execute(query=query)
