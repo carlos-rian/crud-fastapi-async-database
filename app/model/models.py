@@ -36,7 +36,7 @@ item = Table(
     Column("id", Integer, primary_key=True),
     Column("item", String(100), nullable=False),
     Column("preco", Float, nullable=False),
-    Column("estoque", Integer, nullable=False),
+    Column("quantidade", Integer, nullable=False),
     Column("descricao", Text, nullable=True),
     Column("usuario_id_fk", Integer, nullable=False),
     Column("data_de_criacao", DateTime, nullable=False),
@@ -48,6 +48,9 @@ item = Table(
 
 
 def init_app():
+    """
+    Essa função irá criar as tabelas no banco de dados.
+    """
     DATABASE_URI = getenv("DATABASE_URI")
     engine = create_engine(DATABASE_URI, echo=True)
     metadata.create_all(bind=engine)
