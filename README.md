@@ -4,7 +4,7 @@ Crud com FastAPI, SqlAlchemy e Databases.
 ## Descrição
 
 Esse é um exemplo simples de API assincrona com FastAPI onde pode-se criar, ler, atualizar e deletar os dados de um banco de dados.
-Basicamente esse "projeto" tem duas tabelas, sendo essas a de usuário e a de produtos.
+Basicamente esse "projeto" tem duas tabelas, sendo estas usuário e produtos.
 Um relacionamento de 1-N, onde a tabela de produtos recebe o id do usuário. Então um usuário pode ter N produtos.
 
 ## Depências
