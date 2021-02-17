@@ -9,8 +9,8 @@ Um relacionamento de 1-N, onde a tabela de produtos recebe o id do usuário. Ent
 
 ## Depências
 
-- docker
-- docker-compose
+- [docker](https://docs.docker.com/engine/install/ubuntu/)
+- [docker-compose](https://docs.docker.com/compose/install/)
 
 ## Como instânciar o projeto?
 
