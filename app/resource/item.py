@@ -1,12 +1,20 @@
 from databases import Database
 from fastapi import FastAPI
 
-from app.controller import (atualizar_item, deletar_item, inserir_item,
-                            selecionar_item, selecionar_usuario)
+from app.controller import (
+    atualizar_item,
+    deletar_item,
+    inserir_item,
+    selecionar_item,
+    selecionar_usuario,
+)
 from app.error import errors
 from app.schema.input import ItemSchemaBaseIn
-from app.schema.output import (ItemSchemaOut, RespostaDeDelete,
-                               UsuarioItemSchemaOut)
+from app.schema.output import (
+    ItemSchemaOut,
+    RespostaDeDelete,
+    UsuarioItemSchemaOut,
+)
 
 
 def init_app(app: FastAPI, db: Database) -> FastAPI:
@@ -14,10 +22,13 @@ def init_app(app: FastAPI, db: Database) -> FastAPI:
     err_item = errors.item
 
     @app.post(
-        "/usuario/{user_id}/item", response_model=ItemSchemaOut, tags=["item"]
+        "/usuario/{user_id}/item",
+        response_model=ItemSchemaOut,
+        tags=["item"],
+        status_code=201,
     )
     async def criar_item(user_id: int, item: ItemSchemaBaseIn):
-        """ 
+        """
         Crie um novo item para um usuário.
         - **user_id**: informe o user_id do usuário.
         """

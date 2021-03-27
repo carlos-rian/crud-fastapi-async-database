@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   fastapi:
@@ -6,23 +6,27 @@ services:
     command: "uvicorn app:app --reload --use-colors --host 0.0.0.0 --port 80"
     build: ./
     environment:
-      - DATABASE_URI=postgresql://root:12345@postgresql:5432/crud_fastapi
+      - DATABASE_URI=postgresql://root:12345@db/crud_fastapi
     ports:
       - 8000:80
-    links:
-      - postgresql
     depends_on:
-      - postgresql
+      - db
+    links:
+      - db:db
+    networks:
+      - default
 
-  postgresql:
+  db:
     image: postgres:12-alpine
     container_name: database-postgres
     volumes:
-      - ./.data:/var/lib/postgresql/data
+      - /home/docker/volumes/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=12345
       - POSTGRES_DB=crud_fastapi
     ports:
-      - 5055:5432
+      - 5432:5432
+    networks:
+      - default
     restart: always

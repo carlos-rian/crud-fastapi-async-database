@@ -3,16 +3,16 @@ Crud com FastAPI, SqlAlchemy e Databases.
 
 ## Descrição
 
-Este é um exemplo simples de API assincrona com FastAPI onde pode-se criar, ler, atualizar e deletar os dados de um banco de dados.
-Basicamente este "projeto" tem duas tabelas, sendo estas usuário e produtos.
+Esse é um exemplo simples de API assincrona com FastAPI onde pode-se criar, ler, atualizar e deletar os dados de um banco de dados.
+Basicamente esse "projeto" tem duas tabelas, sendo essas a de usuário e a de produtos.
 Um relacionamento de 1-N, onde a tabela de produtos recebe o id do usuário. Então um usuário pode ter N produtos.
 
-## Dependências
+## Depências
 
-- [docker](https://docs.docker.com/engine/install/ubuntu/)
-- [docker-compose](https://docs.docker.com/compose/install/)
+- docker
+- docker-compose
 
-## Como instanciar o projeto?
+## Como instânciar o projeto?
 
 1 - Faça o clone do repo.
 ```sh

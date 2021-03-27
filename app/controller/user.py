@@ -14,6 +14,7 @@ from .item import deletar_item
 
 async def inserir_usuario(db: Database, model: UsuarioSchemaBaseIn) -> dict:
     values = model.dict()
+    print(values)
     query = usuario.insert().values(values)
     id = await db.execute(query=query)
     return {"id": id, **values}

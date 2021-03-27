@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 class ItemSchemaBaseIn(BaseModel):
@@ -19,6 +19,14 @@ class ItemSchemaBaseIn(BaseModel):
     data_de_criacao: datetime = Field(default_factory=datetime.now)
     data_de_atualizacao: datetime = Field(default_factory=datetime.now)
 
+    @validator("data_de_criacao", pre=True)
+    def data_de_criacao_validate(cls, data_de_criacao):
+        return f"{data_de_criacao}".replace("Z", "")
+
+    @validator("data_de_atualizacao", pre=True)
+    def data_de_atualizacao_validate(cls, data_de_atualizacao):
+        return f"{data_de_atualizacao}".replace("Z", "")
+
 
 class UsuarioSchemaBaseIn(BaseModel):
     """
@@ -34,3 +42,10 @@ class UsuarioSchemaBaseIn(BaseModel):
     data_de_criacao: datetime = Field(default_factory=datetime.now)
     data_de_atualizacao: datetime = Field(default_factory=datetime.now)
 
+    @validator("data_de_criacao", pre=True)
+    def data_de_criacao_validate(cls, data_de_criacao):
+        return f"{data_de_criacao}".replace("Z", "")
+
+    @validator("data_de_atualizacao", pre=True)
+    def data_de_atualizacao_validate(cls, data_de_atualizacao):
+        return f"{data_de_atualizacao}".replace("Z", "")
